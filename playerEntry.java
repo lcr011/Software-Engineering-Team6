@@ -6,11 +6,14 @@ import java.awt.Color;
 import javax.swing.border.MatteBorder;
 import java.awt.FlowLayout;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 
 public class playerEntry extends JPanel {
 
+	//Declare variables
 	JTable redTeamTable;
 	JTable greenTeamTable;
 	private JPanel redTeamPanel;
@@ -20,6 +23,7 @@ public class playerEntry extends JPanel {
 	private JButton btnNewButton;
 	
 	public playerEntry() {
+	//Create arrays to be inserted into tables
 	  String[] columns = {"#", "ID", "Codename"};
 	  String[][] redTeamData = new String[20][20];
 	  String[][] greenTeamData = new String[20][20];
@@ -28,11 +32,13 @@ public class playerEntry extends JPanel {
 		  redTeamData[i-1][0] = String.valueOf(i);
 		  greenTeamData[i-1][0] = String.valueOf(i);
 	  }
-	  
+	
+	//Begin creating GUI elements
 	  JPanel panel = new JPanel();
 	  FlowLayout flowLayout = (FlowLayout) panel.getLayout();
 	  add(panel);
 	  
+	//Red team border elements
 	  redTeamPanel = new JPanel();
 	  redTeamPanel.setBackground(new Color(204, 0, 51));
 	  redTeamPanel.setBorder(new TitledBorder(null, "Red Team", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -41,15 +47,25 @@ public class playerEntry extends JPanel {
 	  redTeamScrollPane = new JScrollPane();
 	  redTeamPanel.add(redTeamScrollPane);
 	  
+	//Create table for red team along with a listener to detect changes to table
 	  redTeamTable = new JTable(redTeamData, columns);
+	  redTeamTable.getModel().addTableModelListener(new TableModelListener() {
+
+	      public void tableChanged(TableModelEvent e) {
+	         System.out.println(e);
+	      }
+	    });
+	  
 	  redTeamTable.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
 	  redTeamScrollPane.setViewportView(redTeamTable);
 	  redTeamTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 	  redTeamTable.setFillsViewportHeight(true);
 	  
+	//Start game button
 	  btnNewButton = new JButton("Start Game");
 	  panel.add(btnNewButton);
-	  
+	 
+	//Green team border elements
 	  greenTeamPanel = new JPanel();
 	  greenTeamPanel.setBackground(new Color(0, 204, 102));
 	  greenTeamPanel.setBorder(new TitledBorder(null, "Green Team", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -58,23 +74,20 @@ public class playerEntry extends JPanel {
 	  greenTeamScrollPane = new JScrollPane();
 	  greenTeamPanel.add(greenTeamScrollPane);
 	  
+	//Create table for green team along with a listener to detect changes to table
 	  greenTeamTable = new JTable(greenTeamData, columns);
+	  greenTeamTable.getModel().addTableModelListener(new TableModelListener() {
+
+	      public void tableChanged(TableModelEvent e) {
+	         System.out.println(e);
+	      }
+	    });
+	  
 	  greenTeamScrollPane.setViewportView(greenTeamTable);
 	  greenTeamTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 	  greenTeamTable.setFillsViewportHeight(true);
 	  
 	}
-	
-	public void redTeamAddRow(int num, int id, String codename){
-		DefaultTableModel redTeamModel = (DefaultTableModel) redTeamTable.getModel();
-		redTeamModel.addRow(new Object[]{num, id, codename});
-	}
-	
-	public void greenTeamAddRow(int num, int id, String codename){
-		DefaultTableModel greenTeamModel = (DefaultTableModel) greenTeamTable.getModel();
-		greenTeamModel.addRow(new Object[]{num, id, codename});
-	}
-	
 	
 	public static void main(String[] args) {
       JFrame frame = new JFrame();
