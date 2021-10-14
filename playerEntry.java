@@ -17,14 +17,17 @@ public class playerEntry extends JPanel {
 	private JPanel greenTeamPanel;
 	private JScrollPane redTeamScrollPane;
 	private JScrollPane greenTeamScrollPane;
-	private JButton redTeamAddButton;
-	private JButton greenTeamAddButton;
+	private JButton btnNewButton;
 	
 	public playerEntry() {
 	  String[] columns = {"#", "ID", "Codename"};
+	  String[][] redTeamData = new String[20][20];
+	  String[][] greenTeamData = new String[20][20];
 	  
-	  String[][] redTeamData = {{"1", "100", "Player1"}, {"2", "26", "Player2"}};
-	  String[][] greenTeamData = {{"1", "7045", "Player3"}, {"2", "325", "Player4"}};
+	  for(int i = 1; i <= 20; i++) {
+		  redTeamData[i-1][0] = String.valueOf(i);
+		  greenTeamData[i-1][0] = String.valueOf(i);
+	  }
 	  
 	  JPanel panel = new JPanel();
 	  FlowLayout flowLayout = (FlowLayout) panel.getLayout();
@@ -39,12 +42,13 @@ public class playerEntry extends JPanel {
 	  redTeamPanel.add(redTeamScrollPane);
 	  
 	  redTeamTable = new JTable(redTeamData, columns);
+	  redTeamTable.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
 	  redTeamScrollPane.setViewportView(redTeamTable);
 	  redTeamTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 	  redTeamTable.setFillsViewportHeight(true);
 	  
-	  redTeamAddButton = new JButton("Add Player");
-	  redTeamScrollPane.setRowHeaderView(redTeamAddButton);
+	  btnNewButton = new JButton("Start Game");
+	  panel.add(btnNewButton);
 	  
 	  greenTeamPanel = new JPanel();
 	  greenTeamPanel.setBackground(new Color(0, 204, 102));
@@ -58,9 +62,6 @@ public class playerEntry extends JPanel {
 	  greenTeamScrollPane.setViewportView(greenTeamTable);
 	  greenTeamTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 	  greenTeamTable.setFillsViewportHeight(true);
-	  
-	  greenTeamAddButton = new JButton("Add Player");
-	  greenTeamScrollPane.setRowHeaderView(greenTeamAddButton);
 	  
 	}
 	
@@ -88,5 +89,4 @@ public class playerEntry extends JPanel {
       
       frame.setVisible(true);
 	}
-
 }
