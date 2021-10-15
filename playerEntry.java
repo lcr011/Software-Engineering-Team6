@@ -20,13 +20,13 @@ public class playerEntry extends JPanel {
 	private JScrollPane redTeamScrollPane;
 	private JScrollPane greenTeamScrollPane;
 	private JButton btnNewButton;
+	// Create arrays to be inserted into tables
+	String[] columns = { "#", "ID", "Codename" };
+	String[][] redTeamData = new String[20][20];
+	String[][] greenTeamData = new String[20][20];
 
 	public playerEntry() {
-		// Create arrays to be inserted into tables
-		String[] columns = { "#", "ID", "Codename" };
-		String[][] redTeamData = new String[20][20];
-		String[][] greenTeamData = new String[20][20];
-
+		
 		for (int i = 1; i <= 20; i++) {
 			redTeamData[i - 1][0] = String.valueOf(i);
 			greenTeamData[i - 1][0] = String.valueOf(i);
@@ -59,7 +59,7 @@ public class playerEntry extends JPanel {
 				// First check if it's the ID column
 				if (j == 1) {
 					// Then save the value of the new ID to be checked
-					String checkID = (String) greenTeamTable.getModel().getValueAt(i, j);
+					String checkID = (String) redTeamTable.getModel().getValueAt(i, j);
 					System.out.println(checkID);
 				}
 
