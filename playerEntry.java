@@ -4,14 +4,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.Color;
 import javax.swing.border.MatteBorder;
+import java.awt.FlowLayout;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 
 public class playerEntry extends JPanel {
 
-	private static final long serialVersionUID = 1L;
 	// Declare variables
 	JTable redTeamTable;
 	JTable greenTeamTable;
@@ -20,20 +21,34 @@ public class playerEntry extends JPanel {
 	private JScrollPane redTeamScrollPane;
 	private JScrollPane greenTeamScrollPane;
 	private JButton btnNewButton;
-	// Create arrays to be inserted into tables
-	String[] columns = { "#", "ID", "Codename" };
-	String[][] redTeamData = new String[20][20];
-	String[][] greenTeamData = new String[20][20];
+	private JFrame frame;
+	private JPanel panel;
+	private String[][] greenTeamData;
+	private String[][] redTeamData;
+	private String[] columns;
+	private static final long serialVersionUID = 1L;
 
-	public playerEntry() {
-		
+	public playerEntry(JFrame frm) {
+		// Create arrays to be inserted into tables
+		columns = new String[] { "#", "ID", "Codename" };
+		redTeamData = new String[20][20];
+		greenTeamData = new String[20][20];
+
 		for (int i = 1; i <= 20; i++) {
 			redTeamData[i - 1][0] = String.valueOf(i);
 			greenTeamData[i - 1][0] = String.valueOf(i);
 		}
 
 		// Begin creating GUI elements
-		JPanel panel = new JPanel();
+		this.frame = frm;
+		this.panel = new JPanel();
+
+		initialize();
+	}
+
+	private void initialize() {
+
+		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
 		add(panel);
 
 		// Red team border elements
@@ -64,7 +79,6 @@ public class playerEntry extends JPanel {
 				}
 
 				// Search database for ID value HERE by using String checkID
-				
 			}
 		});
 
@@ -80,7 +94,8 @@ public class playerEntry extends JPanel {
 		// Green team border elements
 		greenTeamPanel = new JPanel();
 		greenTeamPanel.setBackground(new Color(0, 204, 102));
-		greenTeamPanel.setBorder(new TitledBorder(null, "Green Team", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		greenTeamPanel
+				.setBorder(new TitledBorder(null, "Green Team", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel.add(greenTeamPanel);
 
 		greenTeamScrollPane = new JScrollPane();
@@ -105,7 +120,6 @@ public class playerEntry extends JPanel {
 				}
 
 				// Search database for ID value HERE by using String checkID
-
 			}
 		});
 
@@ -113,19 +127,20 @@ public class playerEntry extends JPanel {
 		greenTeamTable.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		greenTeamTable.setFillsViewportHeight(true);
 
+		frame.getContentPane().add(panel);
+
 	}
+	// public static void main(String[] args) {
+	// JFrame frame = new JFrame();
+	// JPanel panel = new JPanel();
+	// playerEntry pEntry = new playerEntry();
 
-	public static void main(String[] args) {
-		JFrame frame = new JFrame();
-		JPanel panel = new JPanel();
-		playerEntry pEntry = new playerEntry();
+	// frame.setTitle("Player Entry");
+	// frame.setSize(1000, 1000);
+	// frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	// frame.getContentPane().add(pEntry);
+	// panel.setLayout(null);
 
-		frame.setTitle("Player Entry");
-		frame.setSize(1000, 1000);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().add(pEntry);
-		panel.setLayout(null);
-
-		frame.setVisible(true);
-	}
+	// frame.setVisible(true);
+	// }
 }
