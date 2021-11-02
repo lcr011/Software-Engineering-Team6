@@ -69,12 +69,12 @@ public class photonMain {
         return conn;
     }
 	public static int getPlayersCount() {
-        String SQL = "SELECT count(*) FROM players";
+        String SQL = "SELECT count(*) FROM player";
         int count = 0;
 
         try (Connection conn = connect();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(SQL)) {
+                ResultSet rs = stmt.executeQuery(SQL)) {y
             rs.next();
             count = rs.getInt(1);
         } catch (SQLException ex) {
@@ -83,26 +83,19 @@ public class photonMain {
 
         return count;
     }
-	public static void getPlayers() {
-
-        String SQL = "SELECT first_name, last_name, codename FROM players";
-
+	public static void getPlayers(String idname) {
+	
         try (Connection conn = connect();
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(SQL)) {
-            // display actor information
-            displayPlayers(rs);
+        		PreparedStatement statement = conn.prepareStatement("SELECT * FROM player WHERE codename = "+idname);
+                ResultSet rs = statement.executeQuery()) {
+        	while (rs.next()) {
+                System.out.println(rs.getString("first_name") + "\t"
+                        + rs.getString("last_name") + "\t"
+                        + rs.getString("codename"));
+
+            }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
     }
-	private void displayPlayers(ResultSet rs) throws SQLException {
-
-		int count = getPlayersCount();
-        for (int n=0; n<count; n++)  {
-            String tempcolumn = (rs.getString("first_name") + ","+ rs.getString("last_name") + ","+ rs.getString("codename"));
-				rows[n] = tempcolumn;
-				System.out.println(rows[n]);
-			  }
-        }
 }
