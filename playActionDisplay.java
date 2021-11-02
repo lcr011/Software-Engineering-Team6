@@ -1,30 +1,24 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JSplitPane;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.JButton;
 import javax.swing.JScrollPane;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.awt.FlowLayout;
 import javax.swing.JTable;
 import java.awt.Color;
 import java.awt.Dimension;
+import javax.swing.JList;
 
 public class playActionDisplay extends JPanel {
-	
+
+	private static final long serialVersionUID = 1L;
 	private JTable table;
 	String[] columns = { "Codename", "Points" };
 	String[][] redTeamData = new String[20][20];
 	String[][] greenTeamData = new String[20][20];
 	String[] playerActions = new String[20];
 	private JTable table_1;
-	private JTable table_2;
 	
 	public playActionDisplay() {
 		
@@ -80,10 +74,11 @@ public class playActionDisplay extends JPanel {
 		model.addColumn("Player Actions", playerActions);
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
-		scrollPane_2.setPreferredSize(new Dimension(900, 200));
+		scrollPane_2.setPreferredSize(new Dimension(900, 300));
 		panel_2.add(scrollPane_2);
-		table_2 = new JTable(model);
-		scrollPane_2.setViewportView(table_2);
+		
+		JList list = new JList(playerActions);
+		scrollPane_2.setViewportView(list);
 		
 	}
 	public static void main(String[] args) {
