@@ -5,6 +5,11 @@ import javax.swing.JTable;
 import java.awt.Color;
 import javax.swing.border.MatteBorder;
 import java.awt.FlowLayout;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javax.swing.border.TitledBorder;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -27,6 +32,7 @@ public class playerEntry extends JPanel {
 	private String[][] redTeamData;
 	private String[] columns;
 	private static final long serialVersionUID = 1L;
+	photonMain photonmain;
 
 	public playerEntry(JFrame frm) {
 		// Create arrays to be inserted into tables
@@ -70,15 +76,47 @@ public class playerEntry extends JPanel {
 				int j = e.getColumn();
 				System.out.println(i);
 				System.out.println(j);
+				int counter = 0;
 
 				// First check if it's the ID column
 				if (j == 1) {
 					// Then save the value of the new ID to be checked
 					String checkID = (String) redTeamTable.getModel().getValueAt(i, j);
+					 try (Connection conn = photonmain.connect();
+				        		PreparedStatement statement = conn.prepareStatement("SELECT * FROM player WHERE id = "+checkID);
+				                ResultSet rs = statement.executeQuery()) {
+				        	while (rs.next() & counter <= 20) {	
+				        		counter++;
+				                String codename = rs.getString("codename");
+				                redTeamData [i][2] = codename;
+
+				            }
+				        } catch (SQLException ex) {
+				            System.out.println(ex.getMessage());
+				        }
 					System.out.println(checkID);
 				}
+				if (j == 2) {
+					// Then save the value of the new ID to be checked
+					String checkcodename = (String) redTeamTable.getModel().getValueAt(i, j);
+					 try (Connection conn = photonmain.connect();
+				        		PreparedStatement statement = conn.prepareStatement("SELECT * FROM player WHERE codename = "+"'"+checkcodename+"'");
+				                ResultSet rs = statement.executeQuery()) {
+				        	while (rs.next() & counter <= 20) {	
+				        		counter++;
+				                String id = rs.getString("id");
+				                redTeamData [i][1] = id;
+
+				            }
+				        } catch (SQLException ex) {
+				            System.out.println(ex.getMessage());
+				        }
+					System.out.println(checkcodename);
+				}
+				
 
 				// Search database for ID value HERE by using String checkID
+				
 			}
 		});
 
@@ -111,15 +149,45 @@ public class playerEntry extends JPanel {
 				int j = e.getColumn();
 				System.out.println(i);
 				System.out.println(j);
-
+				int counter = 0;
 				// First check if it's the ID column
 				if (j == 1) {
 					// Then save the value of the new ID to be checked
 					String checkID = (String) greenTeamTable.getModel().getValueAt(i, j);
+					try (Connection conn = photonmain.connect();
+			        		PreparedStatement statement = conn.prepareStatement("SELECT * FROM player WHERE id = "+checkID);
+			                ResultSet rs = statement.executeQuery()) {
+			        	while (rs.next() & counter <= 20) {	
+			        		counter++;
+			                String codename = rs.getString("codename");
+			                greenTeamData [i][2] = codename;
+
+			            }
+			        } catch (SQLException ex) {
+			            System.out.println(ex.getMessage());
+			        }
 					System.out.println(checkID);
+				}
+				if (j == 2) {
+					// Then save the value of the new ID to be checked
+					String checkcodename = (String) greenTeamTable.getModel().getValueAt(i, j);
+					 try (Connection conn = photonmain.connect();
+				        		PreparedStatement statement = conn.prepareStatement("SELECT * FROM player WHERE codename = "+"'"+checkcodename+"'");
+				                ResultSet rs = statement.executeQuery()) {
+				        	while (rs.next() & counter <= 20) {	
+				        		counter++;
+				                String id = rs.getString("id");
+				                greenTeamData [i][1] = id;
+
+				            }
+				        } catch (SQLException ex) {
+				            System.out.println(ex.getMessage());
+				        }
+					System.out.println(checkcodename);
 				}
 
 				// Search database for ID value HERE by using String checkID
+				
 			}
 		});
 
