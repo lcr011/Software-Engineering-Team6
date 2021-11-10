@@ -16,8 +16,8 @@ public class playActionDisplay extends JPanel {
 	private JTable table;
 	String[] columns = { "Codename", "Points" };
 	String[] actionColumn = { "Player Actions" };
-	String[][] redTeamData = new String[10][2];
-	String[][] greenTeamData = new String[10][2];
+	String[][] redTeamData = new String[20][2];
+	String[][] greenTeamData = new String[20][2];
 	String[][] playerActions = new String[20][2];
 	private JTable table_1;
 	private JTable table_2;
