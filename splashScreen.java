@@ -6,7 +6,7 @@ import javax.swing.JLabel;
 import java.awt.BorderLayout;
 import javax.swing.ImageIcon;
 
-public class splashScreen {
+public class SplashScreen {
 
 	private JFrame frame;
 
@@ -23,7 +23,7 @@ public class splashScreen {
 	/**
 	 * Create the application.
 	 */
-	public splashScreen(JFrame frm) {
+	public SplashScreen(JFrame frm) {
 		this.frame = frm;
 		initialize();
 	}
@@ -46,7 +46,7 @@ public class splashScreen {
 		JLabel lblNewLabel = new JLabel("");
 
 		// create and resize the image to fit the frame
-		Image img = (new ImageIcon(splashScreen.class.getResource("/resources/logo.jpg"))).getImage();
+		Image img = (new ImageIcon(SplashScreen.class.getResource("logo.jpg"))).getImage();
 		img = img.getScaledInstance(frame.getSize().width, frame.getSize().height, Image.SCALE_SMOOTH);
 
 		// set the resized image for display
