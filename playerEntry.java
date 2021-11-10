@@ -9,7 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.awt.event.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -26,13 +26,15 @@ public class playerEntry extends JPanel {
 	private JScrollPane redTeamScrollPane;
 	private JScrollPane greenTeamScrollPane;
 	private JButton btnNewButton;
+	private JButton btnAddPlayer;
 	private JFrame frame;
 	private JPanel panel;
 	private String[][] greenTeamData;
 	private String[][] redTeamData;
 	private String[] columns;
 	private static final long serialVersionUID = 1L;
-	photonMain photonmain;
+	
+
 
 	public playerEntry(JFrame frm) {
 		// Create arrays to be inserted into tables
@@ -82,7 +84,7 @@ public class playerEntry extends JPanel {
 				if (j == 1) {
 					// Then save the value of the new ID to be checked
 					String checkID = (String) redTeamTable.getModel().getValueAt(i, j);
-					 try (Connection conn = photonmain.connect();
+					 try (Connection conn = photonMain.connect();
 				        		PreparedStatement statement = conn.prepareStatement("SELECT * FROM player WHERE id = "+checkID);
 				                ResultSet rs = statement.executeQuery()) {
 				        	while (rs.next() & counter <= 20) {	
@@ -91,15 +93,17 @@ public class playerEntry extends JPanel {
 				                redTeamData [i][2] = codename;
 
 				            }
+				        		
 				        } catch (SQLException ex) {
 				            System.out.println(ex.getMessage());
 				        }
-					System.out.println(checkID);
+					
 				}
 				if (j == 2) {
 					// Then save the value of the new ID to be checked
+					
 					String checkcodename = (String) redTeamTable.getModel().getValueAt(i, j);
-					 try (Connection conn = photonmain.connect();
+					 try (Connection conn = photonMain.connect();
 				        		PreparedStatement statement = conn.prepareStatement("SELECT * FROM player WHERE codename = "+"'"+checkcodename+"'");
 				                ResultSet rs = statement.executeQuery()) {
 				        	while (rs.next() & counter <= 20) {	
@@ -111,14 +115,16 @@ public class playerEntry extends JPanel {
 				        } catch (SQLException ex) {
 				            System.out.println(ex.getMessage());
 				        }
-					System.out.println(checkcodename);
+					
 				}
+				
 				
 
 				// Search database for ID value HERE by using String checkID
 				
 			}
 		});
+		
 
 		redTeamTable.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
 		redTeamScrollPane.setViewportView(redTeamTable);
@@ -128,7 +134,83 @@ public class playerEntry extends JPanel {
 		// Start game button
 		btnNewButton = new JButton("Start Game");
 		panel.add(btnNewButton);
+		
+		//Add Player
+		btnAddPlayer = new JButton("Add player");
+		panel.add(btnAddPlayer);
+		btnAddPlayer.addActionListener(new ActionListener()
+		{
+		  public void actionPerformed(ActionEvent d)
+		  {
+			
+		    for(int i = 0; i < redTeamTable.getColumnCount();i++) {
+		    	if (i == 1) {
+		    		for (int k = 0; k < redTeamTable.getRowCount();k++) {
+		    			if ( redTeamTable.getModel().getValueAt(k, i) != null) {
+		    				String checkID = (String) redTeamTable.getModel().getValueAt(k, 1);
+		    				try (Connection conn = photonMain.connect();
+					        		PreparedStatement statement = conn.prepareStatement("SELECT * FROM player WHERE id = "+"'"+checkID+"'");
+					                ResultSet rs = statement.executeQuery()) {
+		    					{
+		    						
+						        	if (!rs.next()) {	
+						        		String id = (String) redTeamTable.getModel().getValueAt(k, 1);
+						        		String codename = (String) redTeamTable.getModel().getValueAt(k, 2);
+						        		if (id != null && codename != null)
+						        		{
+						        			PreparedStatement statement2 = conn.prepareStatement("Insert into player(id,codename) Values ( "+"'"+ id +"',"+"'"+ codename +"'"+")");
+						        			ResultSet rs2 = statement2.executeQuery();
+						
 
+						            }
+						        }
+			                	
+			                }
+		    				}
+		    				 catch (SQLException ex) {
+						            System.out.println(ex.getMessage());
+						        }
+		    		          
+		    		           
+		    		        }
+		    			
+		    		}
+		    	}
+		    }
+		    for(int i = 0; i < greenTeamTable.getColumnCount();i++) {
+		    	if (i == 1) {
+		    		for (int k = 0; k < greenTeamTable.getRowCount();k++) {
+		    			if ( greenTeamTable.getModel().getValueAt(k, i) != null) {
+		    				String checkID = (String) greenTeamTable.getModel().getValueAt(k, 1);
+		    				try (Connection conn = photonMain.connect();
+					        		PreparedStatement statement = conn.prepareStatement("SELECT * FROM player WHERE id = "+"'"+checkID+"'");
+					                ResultSet rs = statement.executeQuery()) {
+		    					{
+		    						
+						        	if (!rs.next()) {	
+						        		String id = (String) greenTeamTable.getModel().getValueAt(k, 1);
+						        		String codename = (String) greenTeamTable.getModel().getValueAt(k, 2);
+						        	PreparedStatement statement2 = conn.prepareStatement("Insert into player(id,codename) Values ( "+"'"+ id +"',"+"'"+ codename +"'"+")");
+						            ResultSet rs2 = statement2.executeQuery();
+						
+
+						            }
+						        }
+			                	
+			                }
+		    				 catch (SQLException ex) {
+						            System.out.println(ex.getMessage());
+						        }
+		    		          
+		    		           
+		    		        }
+		    			
+		    		}
+		    	}
+		    }
+		    
+		  }
+		});
 		// Green team border elements
 		greenTeamPanel = new JPanel();
 		greenTeamPanel.setBackground(new Color(0, 204, 102));
@@ -154,7 +236,7 @@ public class playerEntry extends JPanel {
 				if (j == 1) {
 					// Then save the value of the new ID to be checked
 					String checkID = (String) greenTeamTable.getModel().getValueAt(i, j);
-					try (Connection conn = photonmain.connect();
+					try (Connection conn = photonMain.connect();
 			        		PreparedStatement statement = conn.prepareStatement("SELECT * FROM player WHERE id = "+checkID);
 			                ResultSet rs = statement.executeQuery()) {
 			        	while (rs.next() & counter <= 20) {	
@@ -171,7 +253,7 @@ public class playerEntry extends JPanel {
 				if (j == 2) {
 					// Then save the value of the new ID to be checked
 					String checkcodename = (String) greenTeamTable.getModel().getValueAt(i, j);
-					 try (Connection conn = photonmain.connect();
+					 try (Connection conn = photonMain.connect();
 				        		PreparedStatement statement = conn.prepareStatement("SELECT * FROM player WHERE codename = "+"'"+checkcodename+"'");
 				                ResultSet rs = statement.executeQuery()) {
 				        	while (rs.next() & counter <= 20) {	
