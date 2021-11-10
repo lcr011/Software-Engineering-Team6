@@ -26,7 +26,7 @@ public class photonMain {
 			public void run() {
 				try {
 					frame.setTitle("Splash Screen");
-					SplashScreen splsh = new SplashScreen(frame);
+					splashScreen splsh = new splashScreen(frame);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
