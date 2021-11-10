@@ -15,18 +15,21 @@ public class playActionDisplay extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTable table;
 	String[] columns = { "Codename", "Points" };
-	String[][] redTeamData = new String[20][20];
-	String[][] greenTeamData = new String[20][20];
-	String[] playerActions = new String[20];
+	String[] actionColumn = { "Player Actions" };
+	String[][] redTeamData = new String[10][2];
+	String[][] greenTeamData = new String[10][2];
+	String[][] playerActions = new String[20][2];
 	private JTable table_1;
+	private JTable table_2;
+	private JTable table_3;
 	
 	public playActionDisplay() {
 		
 		//Placeholder data
-		for (int i = 1; i <= 20; i++) {
+		for (int i = 1; i <= 10; i++) {
 			redTeamData[i - 1][0] = "Player" + String.valueOf(i);
 			greenTeamData[i - 1][0] = "Player" + String.valueOf(i);
-			playerActions[i - 1] = "hit" + String.valueOf(i);
+			playerActions[i - 1][0] = "hit" + String.valueOf(i);
 		}
 		
 		setBorder(new TitledBorder(null, "Current Scores", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -71,14 +74,15 @@ public class playActionDisplay extends JPanel {
 		panel_2.setBorder(new TitledBorder(null, "Current Game Action", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
 		DefaultTableModel model = new DefaultTableModel();
-		model.addColumn("Player Actions", playerActions);
+		model.addColumn("Player actions", playerActions);
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
-		scrollPane_2.setPreferredSize(new Dimension(900, 300));
 		panel_2.add(scrollPane_2);
 		
-		JList list = new JList(playerActions);
-		scrollPane_2.setViewportView(list);
+		scrollPane_2.setViewportView(table_2);
+		
+		table_3 = new JTable(playerActions, actionColumn);
+		scrollPane_2.setViewportView(table_3);
 		
 	}
 	public static void main(String[] args) {
