@@ -14,6 +14,8 @@ public class photonMain {
     private static final String password = "5dc1c02da3a4cef71d3cce3edad7a304de4871f278873cfb1ef6b499fb234327";
   //initialize frame
   	public static JFrame frame = new JFrame();
+  	private static playerEntry plyrEntry;
+  	private static splashScreen splsh;
 
 	public static void main(String args[]) {
 		
@@ -26,7 +28,7 @@ public class photonMain {
 			public void run() {
 				try {
 					frame.setTitle("Splash Screen");
-					splashScreen splsh = new splashScreen(frame);
+					splsh = new splashScreen(frame);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -47,7 +49,7 @@ public class photonMain {
 			public void run() {
 				try {
 					frame.getContentPane().removeAll();
-					playerEntry plyrEntry = new playerEntry(frame);
+					plyrEntry = new playerEntry(frame);
 					frame.setTitle("Player Entry");
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -72,7 +74,7 @@ public class photonMain {
 				public void run() {
 					try {
 						frame.getContentPane().removeAll();
-						playActionDisplay playAction = new playActionDisplay();
+						playActionDisplay playAction = new playActionDisplay(plyrEntry);
 						frame.setTitle("Play Action");
 						frame.getContentPane().add(playAction);
 						frame.setVisible(true);

@@ -23,14 +23,18 @@ public class playActionDisplay extends JPanel {
 	private JTable table_2;
 	private JTable table_3;
 	
-	public playActionDisplay() {
+	public playActionDisplay(playerEntry plyEntry) {
 		
 		//Placeholder data
 		for (int i = 1; i <= 10; i++) {
-			redTeamData[i - 1][0] = "Player" + String.valueOf(i);
-			greenTeamData[i - 1][0] = "Player" + String.valueOf(i);
+			//redTeamData[i - 1][0] = "Player" + String.valueOf(i);
+			//greenTeamData[i - 1][0] = "Player" + String.valueOf(i);
 			playerActions[i - 1][0] = "hit" + String.valueOf(i);
 		}
+		
+		redTeamData = plyEntry.getRedData();
+		greenTeamData = plyEntry.getGreenData();
+		columns = plyEntry.getColumns();
 		
 		setBorder(new TitledBorder(null, "Current Scores", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));

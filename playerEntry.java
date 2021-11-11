@@ -53,6 +53,21 @@ public class playerEntry extends JPanel {
 
 		initialize();
 	}
+	
+	public String[][] getGreenData()
+	{
+		return greenTeamData;
+	}
+	
+	public String[][] getRedData()
+	{
+		return redTeamData;
+	}
+	
+	public String[] getColumns()
+	{
+		return columns;
+	}
 
 	private void initialize() {
 
