@@ -12,13 +12,13 @@ public class photonMain {
 	private static final String url = "jdbc:postgresql://ec2-44-199-26-122.compute-1.amazonaws.com:5432/dfoas6b885fbrt?sslmode=require";
     private static final String user = "xlsnfmxwycfzie";
     private static final String password = "5dc1c02da3a4cef71d3cce3edad7a304de4871f278873cfb1ef6b499fb234327";
+  //initialize frame
+  	public static JFrame frame = new JFrame();
 
 	public static void main(String args[]) {
-		//initialize frame
-		JFrame frame = new JFrame();
-		frame.setSize(1250, 1000);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		frame.setSize(1250, 1000);
+  		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//connect to server 
 		connect();
 		//run splash screen on event dispatcher
@@ -56,7 +56,37 @@ public class photonMain {
 
 			}
 		});
+		
+		
 	}
+	
+	public static void signalReceiver(int code)
+	{
+		System.out.println("Code: " + code + " Received");
+		switch(code)
+		{
+		//case 0 playeEntry -> playActionDisplay
+		case 0:
+			System.out.println("Code 0 received");
+			EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						frame.getContentPane().removeAll();
+						playActionDisplay playAction = new playActionDisplay();
+						frame.setTitle("Play Action");
+						frame.getContentPane().add(playAction);
+						frame.setVisible(true);
+					}
+					catch(Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			break;
+		}
+	}
+	
+	
 	public static Connection connect() {
         Connection conn = null;
         try {

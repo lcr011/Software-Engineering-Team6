@@ -25,7 +25,7 @@ public class playerEntry extends JPanel {
 	private JPanel greenTeamPanel;
 	private JScrollPane redTeamScrollPane;
 	private JScrollPane greenTeamScrollPane;
-	private JButton btnNewButton;
+	private JButton btnStartButton;
 	private JButton btnAddPlayer;
 	private JFrame frame;
 	private JPanel panel;
@@ -132,8 +132,16 @@ public class playerEntry extends JPanel {
 		redTeamTable.setFillsViewportHeight(true);
 
 		// Start game button
-		btnNewButton = new JButton("Start Game");
-		panel.add(btnNewButton);
+		btnStartButton = new JButton("Start Game");
+		panel.add(btnStartButton);
+		btnStartButton.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e)
+					{
+						System.out.println("Action reached");
+						photonMain.signalReceiver(0);
+					}
+				});
 		
 		//Add Player
 		btnAddPlayer = new JButton("Add player");
