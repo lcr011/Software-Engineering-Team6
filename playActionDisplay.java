@@ -9,6 +9,10 @@ import javax.swing.JTable;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JList;
+import java.util.Timer;
+import java.util.TimerTask;
+import javax.swing.*;
+import java.awt.*;
 
 public class playActionDisplay extends JPanel {
 
@@ -23,18 +27,14 @@ public class playActionDisplay extends JPanel {
 	private JTable table_2;
 	private JTable table_3;
 	
-	public playActionDisplay(playerEntry plyEntry) {
+	public playActionDisplay() {
 		
 		//Placeholder data
 		for (int i = 1; i <= 10; i++) {
-			//redTeamData[i - 1][0] = "Player" + String.valueOf(i);
-			//greenTeamData[i - 1][0] = "Player" + String.valueOf(i);
+			redTeamData[i - 1][0] = "Player" + String.valueOf(i);
+			greenTeamData[i - 1][0] = "Player" + String.valueOf(i);
 			playerActions[i - 1][0] = "hit" + String.valueOf(i);
 		}
-		
-		redTeamData = plyEntry.getRedData();
-		greenTeamData = plyEntry.getGreenData();
-		columns = plyEntry.getColumns();
 		
 		setBorder(new TitledBorder(null, "Current Scores", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -87,6 +87,39 @@ public class playActionDisplay extends JPanel {
 		
 		table_3 = new JTable(playerActions, actionColumn);
 		scrollPane_2.setViewportView(table_3);
+		
+		//timer attempt
+		JPanel panel_5 = new JPanel();
+		panel_5.setBackground(new Color(255, 255, 255));
+		panel_4.add(panel_5);
+		panel_5.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		JLabel GTimer = new JLabel();
+		GTimer.setFont(new Font("Impact", Font.PLAIN, 35));
+		panel_5.add(GTimer);
+		
+		Timer timer = new Timer();
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            
+			int PreGameTime = 30;
+			int GameTime = 360;
+
+            public void run() {
+				
+				if(PreGameTime > 0) {
+					GTimer.setText("Game Starting in: " + PreGameTime);
+					PreGameTime--;
+				}else if(GameTime > 0){
+					GTimer.setText("Game Time Remaining: " + GameTime);
+					GameTime--;
+				}else{
+					timer.cancel();
+                    GTimer.setText("Game Over");
+                }
+            }
+        }, 0, 1000);
+		
+		
 		
 	}
 	/*public static void main(String[] args) {
