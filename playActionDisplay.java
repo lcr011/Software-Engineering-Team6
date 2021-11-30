@@ -13,6 +13,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.*;
 import java.awt.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 
 public class playActionDisplay extends JPanel {
 
@@ -27,7 +29,7 @@ public class playActionDisplay extends JPanel {
 	private JTable table_2;
 	private JTable table_3;
 	
-	public playActionDisplay(playerEntry plyEntry) {
+	public playActionDisplay(playerEntry plyEntry, DatagramSocket rec) {
 		
 		//Placeholder data
 		for (int i = 1; i <= 10; i++) {
@@ -110,12 +112,22 @@ public class playActionDisplay extends JPanel {
 
             public void run() {
 				
+            	byte buffer[] = new byte[8];
 				if(PreGameTime > 0) {
 					GTimer.setText("Game Starting in: " + PreGameTime);
 					PreGameTime--;
 				}else if(GameTime > 0){
+					DatagramPacket p = new DatagramPacket(buffer, 8);
+					try {
+					rec.receive(p);
+					}
+					catch(Exception e)
+					{
+						e.printStackTrace();
+					}
 					GTimer.setText("Game Time Remaining: " + GameTime);
 					GameTime--;
+					System.out.println(new String(p.getData(), 0, p.getLength()));
 				}else{
 					timer.cancel();
                     GTimer.setText("Game Over");
