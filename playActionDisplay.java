@@ -3,6 +3,9 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+
+import photonMain.Datagram;
+
 import javax.swing.JScrollPane;
 import java.awt.FlowLayout;
 import javax.swing.JTable;
@@ -30,6 +33,23 @@ public class playActionDisplay extends JPanel {
 	private JTable table_3;
 	
 	public playActionDisplay(playerEntry plyEntry, DatagramSocket rec) {
+		
+		
+		class DatagramThread extends Thread{
+			public void run() {
+				
+				byte buffer[] = new byte[8];
+				DatagramPacket p = new DatagramPacket(buffer, 8);
+				try {
+				rec.receive(p);
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+				System.out.println(new String(p.getData(), 0, p.getLength()));
+			}
+		}
 		
 		//Placeholder data
 		for (int i = 1; i <= 10; i++) {
@@ -112,22 +132,17 @@ public class playActionDisplay extends JPanel {
 
             public void run() {
 				
-            	byte buffer[] = new byte[8];
+            	
 				if(PreGameTime > 0) {
 					GTimer.setText("Game Starting in: " + PreGameTime);
 					PreGameTime--;
 				}else if(GameTime > 0){
-					DatagramPacket p = new DatagramPacket(buffer, 8);
-					try {
-					rec.receive(p);
-					}
-					catch(Exception e)
-					{
-						e.printStackTrace();
-					}
+					
+					DatagramThread Packets = new DatagramThread();
+					Packets.start();
+					
 					GTimer.setText("Game Time Remaining: " + GameTime);
 					GameTime--;
-					System.out.println(new String(p.getData(), 0, p.getLength()));
 				}else{
 					timer.cancel();
                     GTimer.setText("Game Over");
