@@ -4,8 +4,6 @@ import javax.swing.JSplitPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
-import photonMain.Datagram;
-
 import javax.swing.JScrollPane;
 import java.awt.FlowLayout;
 import javax.swing.JTable;
@@ -31,6 +29,7 @@ public class playActionDisplay extends JPanel {
 	private JTable table_1;
 	private JTable table_2;
 	private JTable table_3;
+	private int currentHitCount = 0;
 	
 	public playActionDisplay(playerEntry plyEntry, DatagramSocket rec) {
 		
@@ -42,11 +41,13 @@ public class playActionDisplay extends JPanel {
 				DatagramPacket p = new DatagramPacket(buffer, 8);
 				try {
 				rec.receive(p);
+				currentHitCount++;
 				}
 				catch(Exception e)
 				{
 					e.printStackTrace();
 				}
+				playerActions[currentHitCount - 1][0] = new String(p.getData());
 				System.out.println(new String(p.getData(), 0, p.getLength()));
 			}
 		}
