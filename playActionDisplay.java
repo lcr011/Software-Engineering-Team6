@@ -3,7 +3,6 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
-
 import javax.swing.JScrollPane;
 import java.awt.FlowLayout;
 import javax.swing.JTable;
@@ -16,6 +15,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class playActionDisplay extends JPanel {
 
@@ -26,41 +29,42 @@ public class playActionDisplay extends JPanel {
 	private JTable table_1;
 	private JTable table_2;
 	private JTable table_3;
+	private int RedMemberPoints;
+	private int GreenMemberPoints;
 	private int currentHitCount = 0;
+	private int minusP = -100;
+	private int plusP = 100;
+	private int maxPlayerCount = 20;
+	String[][] redTeamData = new String[maxPlayerCount][2];
+	String[][] greenTeamData = new String[maxPlayerCount][2];
+	String[][] playerActions = new String[maxPlayerCount][2];
+	public String FindPlayerName(String ID) {
+		int counter = 0;
+		String codename = null;
+		 try (Connection conn = photonMain.connect();
+	        		PreparedStatement statement = conn.prepareStatement("SELECT * FROM player WHERE id = "+ID);
+	                ResultSet rs = statement.executeQuery()) {
+	        	while (rs.next() & counter <= maxPlayerCount) {	
+	        		counter++;
+	                codename = rs.getString("codename");
+
+	            }
+	        		
+	        } catch (SQLException ex) {
+	            System.out.println(ex.getMessage());
+	        }
+		 return codename;
+	}
 	
 	public playActionDisplay(playerEntry plyEntry, DatagramSocket rec) {
-		int maxPlayerCount = plyEntry.getMaxPlayerCount();
-		String[][] redTeamData = new String[maxPlayerCount][2];
-		String[][] greenTeamData = new String[maxPlayerCount][2];
-		String[][] playerActions = new String[maxPlayerCount][2];
-		
-		class DatagramThread extends Thread{
-			public void run() {
-				
-				byte buffer[] = new byte[8];
-				DatagramPacket p = new DatagramPacket(buffer, 8);
-				try {
-				rec.receive(p);
-				currentHitCount++;
-				}
-				catch(Exception e)
-				{
-					e.printStackTrace();
-				}
-				playerActions[currentHitCount - 1][0] = new String(p.getData());
-				System.out.println(new String(p.getData(), 0, p.getLength()));
-			}
-		}
-		
-		//Placeholder data
-		for (int i = 1; i <= 10; i++) {
-			//redTeamData[i - 1][0] = "Player" + String.valueOf(i);
-			//greenTeamData[i - 1][0] = "Player" + String.valueOf(i);
-			playerActions[i - 1][0] = "hit" + String.valueOf(i);
-		}
 		
 		redTeamData = plyEntry.getRedData();
 		greenTeamData = plyEntry.getGreenData();
+		
+		redTeamData[maxPlayerCount - 1][2] = "RED TOTAL:";
+		redTeamData[maxPlayerCount - 1][3] = String.valueOf(RedMemberPoints);
+		greenTeamData[maxPlayerCount - 1][2] = "GREEN TOTAL:";
+		greenTeamData[maxPlayerCount - 1][3] = String.valueOf(GreenMemberPoints);
 		
 		setBorder(new TitledBorder(null, "Current Scores", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -124,6 +128,75 @@ public class playActionDisplay extends JPanel {
 		panel_5.add(GTimer);
 		
 		Timer timer = new Timer();
+		class DatagramThread extends Thread{
+			public void run() {
+				
+				byte buffer[] = new byte[8];
+				DatagramPacket p = new DatagramPacket(buffer, 8);
+				try {
+					if(rec != null) {
+						rec.receive(p);
+						currentHitCount++; 
+						String packet = new String(p.getData());
+						String arr[] = packet.split(":", 2);
+						String FirstID = arr[0];
+						String SecondID = arr[1];
+						char ID2 = SecondID.charAt(0);
+						String stringID2 = String.valueOf(ID2);
+						playerActions[currentHitCount - 1][0] = FindPlayerName(FirstID) + " " + "Hit " + FindPlayerName(stringID2); 
+						for(int i = 0; i < maxPlayerCount;i++)
+						{
+							if (table.getModel().getValueAt(i, 1) != null) {
+							
+								if ((boolean)table.getValueAt(i, 1).equals(FirstID))
+								{
+									int current = Integer.valueOf(redTeamData[i][3]);
+									current += plusP;
+									RedMemberPoints+= plusP;
+									redTeamData [i][3] = String.valueOf(current);
+									redTeamData[maxPlayerCount - 1][3] = String.valueOf(RedMemberPoints);
+									table.repaint();
+								}
+								if ((boolean)table.getValueAt(i, 1).equals(stringID2))
+								{
+									int current = Integer.valueOf(redTeamData[i][3]);
+									current += minusP;
+									RedMemberPoints+= minusP;
+									redTeamData [i][3] = String.valueOf(current);
+									redTeamData[maxPlayerCount - 1][3] = String.valueOf(RedMemberPoints);
+									table.repaint();
+								}
+								if ((boolean)table_1.getValueAt(i, 1).equals(FirstID))
+								{
+									int current = Integer.valueOf(greenTeamData[i][3]);
+									current += plusP;
+									GreenMemberPoints+= plusP;
+									greenTeamData [i][3] = String.valueOf(current);
+									greenTeamData[maxPlayerCount - 1][3] = String.valueOf(GreenMemberPoints);
+									table_1.repaint();
+								}
+								if ((boolean)table_1.getValueAt(i, 1).equals(stringID2))
+								{
+									int current = Integer.valueOf(greenTeamData[i][3]);
+									current += minusP;
+									GreenMemberPoints+= minusP;
+									greenTeamData [i][3] = String.valueOf(current);
+									greenTeamData[maxPlayerCount - 1][3] = String.valueOf(GreenMemberPoints);
+									table_1.repaint();
+								}
+								
+							
+						}
+					}
+				}
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+				
+			}
+		}
 
         timer.scheduleAtFixedRate(new TimerTask() {
             
@@ -131,7 +204,6 @@ public class playActionDisplay extends JPanel {
 			int GameTime = 360;
 
             public void run() {
-				
             	
 				if(PreGameTime > 0) {
 					GTimer.setText("Game Starting in: " + PreGameTime);
@@ -149,8 +221,6 @@ public class playActionDisplay extends JPanel {
                 }
             }
         }, 0, 1000);
-		
-		
 		
 	}
 	/*public static void main(String[] args) {
