@@ -39,8 +39,8 @@ public class playerEntry extends JPanel {
 	public playerEntry(JFrame frm) {
 		// Create arrays to be inserted into tables
 		columns = new String[] { "#", "ID", "Codename" };
-		redTeamData = new String[20][20];
-		greenTeamData = new String[20][20];
+		redTeamData = new String[20][4];
+		greenTeamData = new String[20][4];
 
 		for (int i = 1; i <= 20; i++) {
 			redTeamData[i - 1][0] = String.valueOf(i);
