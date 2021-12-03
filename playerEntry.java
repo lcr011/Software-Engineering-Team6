@@ -33,16 +33,16 @@ public class playerEntry extends JPanel {
 	private String[][] redTeamData;
 	private String[] columns;
 	private static final long serialVersionUID = 1L;
-	
+	private int maxPlayerCount = 10;
 
 
 	public playerEntry(JFrame frm) {
 		// Create arrays to be inserted into tables
 		columns = new String[] { "#", "ID", "Codename" };
-		redTeamData = new String[20][4];
-		greenTeamData = new String[20][4];
+		redTeamData = new String[maxPlayerCount][4];
+		greenTeamData = new String[maxPlayerCount][4];
 
-		for (int i = 1; i <= 20; i++) {
+		for (int i = 1; i <= maxPlayerCount; i++) {
 			redTeamData[i - 1][0] = String.valueOf(i);
 			greenTeamData[i - 1][0] = String.valueOf(i);
 		}
@@ -67,6 +67,11 @@ public class playerEntry extends JPanel {
 	public String[] getColumns()
 	{
 		return columns;
+	}
+	
+	public int getMaxPlayerCount()
+	{
+		return maxPlayerCount;
 	}
 
 	private void initialize() {
@@ -102,7 +107,7 @@ public class playerEntry extends JPanel {
 					 try (Connection conn = photonMain.connect();
 				        		PreparedStatement statement = conn.prepareStatement("SELECT * FROM player WHERE id = "+checkID);
 				                ResultSet rs = statement.executeQuery()) {
-				        	while (rs.next() & counter <= 20) {	
+				        	while (rs.next() & counter <= maxPlayerCount) {	
 				        		counter++;
 				                String codename = rs.getString("codename");
 				                redTeamData [i][2] = codename;
@@ -121,7 +126,7 @@ public class playerEntry extends JPanel {
 					 try (Connection conn = photonMain.connect();
 				        		PreparedStatement statement = conn.prepareStatement("SELECT * FROM player WHERE codename = "+"'"+checkcodename+"'");
 				                ResultSet rs = statement.executeQuery()) {
-				        	while (rs.next() & counter <= 20) {	
+				        	while (rs.next() & counter <= maxPlayerCount) {	
 				        		counter++;
 				                String id = rs.getString("id");
 				                redTeamData [i][1] = id;
@@ -262,7 +267,7 @@ public class playerEntry extends JPanel {
 					try (Connection conn = photonMain.connect();
 			        		PreparedStatement statement = conn.prepareStatement("SELECT * FROM player WHERE id = "+checkID);
 			                ResultSet rs = statement.executeQuery()) {
-			        	while (rs.next() & counter <= 20) {	
+			        	while (rs.next() & counter <= maxPlayerCount) {	
 			        		counter++;
 			                String codename = rs.getString("codename");
 			                greenTeamData [i][2] = codename;
@@ -279,7 +284,7 @@ public class playerEntry extends JPanel {
 					 try (Connection conn = photonMain.connect();
 				        		PreparedStatement statement = conn.prepareStatement("SELECT * FROM player WHERE codename = "+"'"+checkcodename+"'");
 				                ResultSet rs = statement.executeQuery()) {
-				        	while (rs.next() & counter <= 20) {	
+				        	while (rs.next() & counter <= maxPlayerCount) {	
 				        		counter++;
 				                String id = rs.getString("id");
 				                greenTeamData [i][1] = id;
