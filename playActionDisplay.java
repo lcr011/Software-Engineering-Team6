@@ -21,7 +21,7 @@ public class playActionDisplay extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JTable table;
-	String[] columns = { "Codename", "Points" };
+	String[] columns = { "#", "ID", "Codename", "Points" };
 	String[] actionColumn = { "Player Actions" };
 	String[][] redTeamData = new String[20][2];
 	String[][] greenTeamData = new String[20][2];
@@ -61,7 +61,6 @@ public class playActionDisplay extends JPanel {
 		
 		redTeamData = plyEntry.getRedData();
 		greenTeamData = plyEntry.getGreenData();
-		columns = plyEntry.getColumns();
 		
 		setBorder(new TitledBorder(null, "Current Scores", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
