@@ -23,16 +23,16 @@ public class playActionDisplay extends JPanel {
 	private JTable table;
 	String[] columns = { "#", "ID", "Codename", "Points" };
 	String[] actionColumn = { "Player Actions" };
-	String[][] redTeamData = new String[20][2];
-	String[][] greenTeamData = new String[20][2];
-	String[][] playerActions = new String[20][2];
 	private JTable table_1;
 	private JTable table_2;
 	private JTable table_3;
 	private int currentHitCount = 0;
 	
 	public playActionDisplay(playerEntry plyEntry, DatagramSocket rec) {
-		
+		int maxPlayerCount = plyEntry.getMaxPlayerCount();
+		String[][] redTeamData = new String[maxPlayerCount][2];
+		String[][] greenTeamData = new String[maxPlayerCount][2];
+		String[][] playerActions = new String[maxPlayerCount][2];
 		
 		class DatagramThread extends Thread{
 			public void run() {
