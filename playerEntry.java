@@ -32,8 +32,9 @@ public class playerEntry extends JPanel {
 	private String[][] greenTeamData;
 	private String[][] redTeamData;
 	private String[] columns;
+	private int maxPlayerCount = 20;
 	private static final long serialVersionUID = 1L;
-	private int maxPlayerCount = 10;
+	
 
 
 	public playerEntry(JFrame frm) {
@@ -44,7 +45,9 @@ public class playerEntry extends JPanel {
 
 		for (int i = 1; i <= maxPlayerCount; i++) {
 			redTeamData[i - 1][0] = String.valueOf(i);
+			redTeamData[i - 1][3] = "0";
 			greenTeamData[i - 1][0] = String.valueOf(i);
+			greenTeamData[i - 1][3] = "0";
 		}
 
 		// Begin creating GUI elements
@@ -67,11 +70,6 @@ public class playerEntry extends JPanel {
 	public String[] getColumns()
 	{
 		return columns;
-	}
-	
-	public int getMaxPlayerCount()
-	{
-		return maxPlayerCount;
 	}
 
 	private void initialize() {
