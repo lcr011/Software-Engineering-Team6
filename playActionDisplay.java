@@ -214,7 +214,7 @@ public class playActionDisplay extends JPanel {
             public void run() {
             	
 				if(PreGameTime > 0) {
-					GTimer.setText("Game Time Remaining: " + (PreGameTime/60) + ":" + ((PreGameTime%60)/10 == 0 ? ("0" + PreGameTime%60) : (PreGameTime%60 == 0 ? "00" : (PreGameTime%60))));
+					GTimer.setText("Time Before Game Start: " + (PreGameTime/60) + ":" + ((PreGameTime%60)/10 == 0 ? ("0" + PreGameTime%60) : (PreGameTime%60 == 0 ? "00" : (PreGameTime%60))));
 					PreGameTime--;
 				}
 				/*else if(!started) {
