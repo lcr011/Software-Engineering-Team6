@@ -207,8 +207,8 @@ public class playActionDisplay extends JPanel {
 
         timer.scheduleAtFixedRate(new TimerTask() {
             
-			int PreGameTime = 10;
-			int GameTime = 120;
+			int PreGameTime = 30;
+			int GameTime = 360;
 			boolean started = false;
 
             public void run() {
