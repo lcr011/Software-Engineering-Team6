@@ -7,8 +7,6 @@ import javax.swing.JScrollPane;
 import java.awt.FlowLayout;
 import javax.swing.JTable;
 import java.awt.Color;
-import java.awt.Dimension;
-import javax.swing.JList;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.*;
@@ -38,6 +36,7 @@ public class playActionDisplay extends JPanel {
 	String[][] redTeamData = new String[maxPlayerCount][2];
 	String[][] greenTeamData = new String[maxPlayerCount][2];
 	String[][] playerActions = new String[maxPlayerCount][2];
+	//ArrayList<String> playerActions = new ArrayList<String>();
 	public String FindPlayerName(String ID) {
 		int counter = 0;
 		String codename = null;
@@ -108,14 +107,14 @@ public class playActionDisplay extends JPanel {
 		panel_2.setBorder(new TitledBorder(null, "Current Game Action", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
 		DefaultTableModel model = new DefaultTableModel();
-		model.addColumn("Player actions", playerActions);
+		model.addColumn("Player actions");
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
 		panel_2.add(scrollPane_2);
 		
 		scrollPane_2.setViewportView(table_2);
 		
-		table_3 = new JTable(playerActions, actionColumn);
+		table_3 = new JTable(model);
 		scrollPane_2.setViewportView(table_3);
 		
 		//timer attempt
@@ -143,7 +142,15 @@ public class playActionDisplay extends JPanel {
 						String SecondID = arr[1];
 						char ID2 = SecondID.charAt(0);
 						String stringID2 = String.valueOf(ID2);
-						playerActions[currentHitCount - 1][0] = FindPlayerName(FirstID) + " " + "Hit " + FindPlayerName(stringID2); 
+						//playerActions.add(FindPlayerName(FirstID) + " " + "Hit " + FindPlayerName(stringID2)); 
+						if(table_3.getRowCount() >= 20) {
+							model.removeRow(0);
+							model.addRow(new Object[] {FindPlayerName(FirstID) + " " + "Hit " + FindPlayerName(stringID2)});
+							
+						}
+						else {
+							model.addRow(new Object[] {FindPlayerName(FirstID) + " " + "Hit " + FindPlayerName(stringID2)});
+						}
 						for(int i = 0; i < maxPlayerCount;i++)
 						{
 							if (table.getModel().getValueAt(i, 1) != null) {
@@ -200,20 +207,30 @@ public class playActionDisplay extends JPanel {
 
         timer.scheduleAtFixedRate(new TimerTask() {
             
-			int PreGameTime = 30;
-			int GameTime = 360;
+			int PreGameTime = 10;
+			int GameTime = 120;
+			boolean started = false;
 
             public void run() {
             	
 				if(PreGameTime > 0) {
-					GTimer.setText("Game Starting in: " + PreGameTime);
+					GTimer.setText("Game Time Remaining: " + (PreGameTime/60) + ":" + ((PreGameTime%60)/10 == 0 ? ("0" + PreGameTime%60) : (PreGameTime%60 == 0 ? "00" : (PreGameTime%60))));
 					PreGameTime--;
-				}else if(GameTime > 0){
+				}
+				/*else if(!started) {
+					try {
+						Process p = Runtime.getRuntime().exec("python /resources/trafficgenerator.py 1 2 3 4 100");
+					}
+					catch(Exception e) {
+						e.printStackTrace();
+					}
+				}*/
+				else if(GameTime > 0){
 					
 					DatagramThread Packets = new DatagramThread();
 					Packets.start();
 					
-					GTimer.setText("Game Time Remaining: " + GameTime);
+					GTimer.setText("Game Time Remaining: " + (GameTime/60) + ":" + ((GameTime%60)/10 == 0 ? ("0" + GameTime%60) : (GameTime%60 == 0 ? "00" : (GameTime%60))));
 					GameTime--;
 				}else{
 					timer.cancel();
