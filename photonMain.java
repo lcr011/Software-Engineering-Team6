@@ -1,4 +1,6 @@
 import java.awt.EventQueue;
+import java.net.DatagramSocket;
+import java.net.SocketException;
 import javax.swing.JFrame;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,13 +18,23 @@ public class photonMain {
   	public static JFrame frame = new JFrame();
   	private static playerEntry plyrEntry;
   	private static splashScreen splsh;
+  	public static final int recipientPort = 7501;
+  	public static DatagramSocket recipient;
 
+  	
 	public static void main(String args[]) {
 		
 		frame.setSize(1250, 1000);
   		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//connect to server 
 		connect();
+		//create datagram sockets
+		try {
+			recipient = new DatagramSocket(recipientPort);
+		}
+		catch(SocketException e) {
+			
+		}
 		//run splash screen on event dispatcher
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -67,14 +79,14 @@ public class photonMain {
 		System.out.println("Code: " + code + " Received");
 		switch(code)
 		{
-		//case 0 playeEntry -> playActionDisplay
+		//case 0 playerEntry -> playActionDisplay
 		case 0:
 			System.out.println("Code 0 received");
 			EventQueue.invokeLater(new Runnable() {
 				public void run() {
 					try {
 						frame.getContentPane().removeAll();
-						playActionDisplay playAction = new playActionDisplay(plyrEntry);
+						playActionDisplay playAction = new playActionDisplay(plyrEntry, recipient);
 						frame.setTitle("Play Action");
 						frame.getContentPane().add(playAction);
 						frame.setVisible(true);
